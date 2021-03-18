@@ -1,0 +1,50 @@
+***Topico 200 - Planejamento da Capacidade.
+
+#apt install sysstat
+
+***Comando iostat - Estatisticas de Uso da CPU ou entrada e saída de informassões dos dispositivos de blocos(HD). Consulta aos arquivos /proc e /sys.
+
+
+Linux 5.9.0-kali1-amd64 (dublin) 	03/17/2021 	_x86_64_	(2 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           1.26    0.00    1.40    0.17    0.00   97.17
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd
+sda               1.29        27.98         9.66         0.00     658993     227467          0
+sr0               0.00         0.04         0.00         0.00       1050          0          0
+
+%user - Percentual de uso da CPU(aplicações) - Nivel usuario
+%nice - Percentual de uso da CPU(durante execução do usuario)
+%system - Percentual de uso da CPU durante a execução nivel de sistema
+%iowait - Exibe percentual de tempo ociosa que a CPU estava aguardando entrada e saida de disco.
+%steal - Exibe o percentual de tempo que a CPU virtual estava ociosa devido ao hipervisor estar servindo a outra CPU virtual.
+%idle - Exibe percentual de tempo em que a CPU estava ociosa e não aguardava por entrada e saida de disco.
+
+KB_read/s KB_wrtn/s - Quantidade de dados lidos e gravados por segundos.
+
+KB_read KB_wrtn - Quantidade de dados lidos e gravados no intervalo.
+
+
+
+
+#iostat -c 3 3 ( -c contar de 3segundos por 3 vezes)
+Linux 5.9.0-kali1-amd64 (dublin) 	03/17/2021 	_x86_64_	(2 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           1.24    0.00    1.38    0.17    0.00   97.21
+
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.17    0.00    0.17    0.00    0.00   99.66
+
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.17    0.00    0.17    0.00    0.00   99.66
+
+#iostat -d 2 - Vai contar as entradas de disco a cada 2 segundos
+
+
+
