@@ -46,5 +46,22 @@ avg-cpu:  %user   %nice %system %iowait  %steal   %idle
 
 #iostat -d 2 - Vai contar as entradas de disco a cada 2 segundos
 
+Comando sar - Utilizado para gera relatorios como o iostat.
+para habilitar a coleta de informações. /etc/default/sysstat - no arquivo a linha ENABLED=true.
+
+systemd o serviço deve estar ativado. #systemctl enable sysstat.service
+
+Os arquivos coletados são armazenados no /var/log/sysstat ou /var/log/sa e cada arquivo corresponde a 1 dia.
+
+Para ler as informações.
+sar -f /var/log/sysstat/sa24 - Var ler as informações do dia 24.
+
+sar  - Dados de uso da CPU
+sar -b Resumo das entradas e saídas
+sar -d Entrada e saida por dispositivo
+sar -B Informações de paginação feita pelo sistema
+sar -r Utilização da memoria ram
+sar -S Utilização da swap
+sar -n DEV Trafego de dados em todas as interfaces de rede. Comando semelhante netstat -i. netstat -s exibe estatisticas de trafego de cada protocolo de rede.
 
 
