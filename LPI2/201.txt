@@ -65,3 +65,665 @@ sar -S Utilização da swap
 sar -n DEV Trafego de dados em todas as interfaces de rede. Comando semelhante netstat -i. netstat -s exibe estatisticas de trafego de cada protocolo de rede.
 
 
+lsof - List Open Files.
+
++D Procura por instancias abertas do diretorio e arquivos
+-l Lista Sockets abertos
+-i:n Lista conexões abertas na porta
+-i [tcp|udp] Lista portas tcp e Udp
+-u Lista usuario
+-p Lista PID
+-t Lista identificadores dos processos(PID)
+-c Mostra quais arquivos e conexões de rede um comando está usando
+
+$ lsof | grep /opt                                                                       1 ⨯
+                                                                                               
+┌──(dublin㉿dublin)-[/etc/default]
+└─$ lsof | grep /etc                                                                       1 ⨯
+zsh       1233                    dublin  cwd       DIR                8,3     4096    1310764 /etc/default
+lsof      1452                    dublin  cwd       DIR                8,3     4096    1310764 /etc/default
+grep      1453                    dublin  cwd       DIR                8,3     4096    1310764 /etc/default
+lsof      1454                    dublin  cwd       DIR                8,3     4096    1310764 /etc/default
+
+$ sudo lsof -c ping               
+[sudo] password for dublin: 
+lsof: WARNING: can't stat() fuse.gvfsd-fuse file system /run/user/1000/gvfs
+      Output information may be incomplete.
+COMMAND  PID   USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+ping    1485 dublin  cwd    DIR    8,3     4096 1720752 /home/dublin
+ping    1485 dublin  rtd    DIR    8,3     4096       2 /
+ping    1485 dublin  txt    REG    8,3    77432 1185333 /usr/bin/ping
+ping    1485 dublin  mem    REG    8,3  3035952 1179718 /usr/lib/locale/locale-archive
+ping    1485 dublin  mem    REG    8,3  1574952 1182991 /usr/lib/x86_64-linux-gnu/libunistring.so.2.1.0
+ping    1485 dublin  mem    REG    8,3  1839792 1180144 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+ping    1485 dublin  mem    REG    8,3    93000 1182125 /usr/lib/x86_64-linux-gnu/libresolv-2.31.so
+ping    1485 dublin  mem    REG    8,3   128944 1180569 /usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7
+ping    1485 dublin  mem    REG    8,3    38864 1183714 /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+ping    1485 dublin  mem    REG    8,3    27002 1182552 /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+
+ping    1485 dublin  mem    REG    8,3   177928 1180139 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+ping    1485 dublin    0u   CHR  136,2      0t0       5 /dev/pts/2
+ping    1485 dublin    1u   CHR  136,2      0t0       5 /dev/pts/2
+ping    1485 dublin    2u   CHR  136,2      0t0       5 /dev/pts/2
+ping    1485 dublin    3u   raw             0t0   38944 00000000:0001->00000000:0000 st=07
+ping    1485 dublin    4u  raw6             0t0   38946 00000000000000000000000000000000:003A->00000000000000000000000000000000:0000 st=07
+
+***uptime - Informa quanto tempo o computador esta em uso, além de mostrar numeros de usuarios acessando servidor e carga de trabalho.
+
+$ uptime             
+ 17:52:57 up 42 min,  1 user,  load average: 0.10, 0.06, 0.03
+
+***Partição swap
+
+mkswap - transforma uma partição swap. Depois de criada, ativar com comando: swapon
+Desativar: swapoff
+
+mkswap -a Ativa as partiçoes do fstab. Opção noauto não serão afetadas.
+
+-a -e Ignora sem notificação de alguma partição não encontradas
+
+Set up a Linux swap area.
+
+Options:
+ -c, --check               check bad blocks before creating the swap area
+ -f, --force               allow swap size area be larger than device
+ -p, --pagesize SIZE       specify page size in bytes
+ -L, --label LABEL         specify label
+ -v, --swapversion NUM     specify swap-space version number
+ -U, --uuid UUID           specify the uuid to use
+     --lock[=<mode>]       use exclusive device lock (yes, no or nonblock)
+ -h, --help                display this help
+ -V, --version             display version
+
+
+cat /proc/swaps
+
+***pstree Comando para mostrar processos em formato de arvore genealógica
+
+#apt install psmisc
+
+
+Display a tree of processes.
+
+  -a, --arguments     show command line arguments
+  -A, --ascii         use ASCII line drawing characters
+  -c, --compact-not   don't compact identical subtrees
+  -C, --color=TYPE    color process by attribute
+                      (age)
+  -g, --show-pgids    show process group ids; implies -c
+  -G, --vt100         use VT100 line drawing characters
+  -h, --highlight-all highlight current process and its ancestors
+  -H PID, --highlight-pid=PID
+                      highlight this process and its ancestors
+  -l, --long          don't truncate long lines
+  -n, --numeric-sort  sort output by PID
+  -N TYPE, --ns-sort=TYPE
+                      sort output by this namespace type
+                              (cgroup, ipc, mnt, net, pid, user, uts)
+  -p, --show-pids     show PIDs; implies -c
+  -s, --show-parents  show parents of the selected process
+  -S, --ns-changes    show namespace transitions
+  -t, --thread-names  show full thread names
+  -T, --hide-threads  hide threads, show only processes
+  -u, --uid-changes   show uid transitions
+  -U, --unicode       use UTF-8 (Unicode) line drawing characters
+  -V, --version       display version information
+  -Z, --security-context
+                      show SELinux security contexts
+
+  PID    start at this PID; default is 1 (init)
+  USER   show only trees rooted at processes of this user
+
+***ps - Utilizado para obter informações sobre os processo que estão sendo executados.
+
+->Processos ligados a um terminal
+$ ps a     
+    PID TTY      STAT   TIME COMMAND
+    598 tty7     Ssl+   0:36 /usr/lib/xorg/Xorg :0 -seat seat0 -auth /var/run/lightdm/root/:0 -
+    599 tty1     Ss+    0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+   1199 pts/0    Ss     0:00 /usr/bin/zsh
+   1221 pts/0    S+     0:01 vi 201.txt
+   1233 pts/1    Ss+    0:05 /usr/bin/zsh
+   1470 pts/2    Ss     0:02 /usr/bin/zsh
+   1998 pts/2    R+     0:00 ps a
+
+->Exibe lista completa dos processos.
+$ ps -d    
+    PID TTY          TIME CMD
+      2 ?        00:00:00 kthreadd
+      3 ?        00:00:00 rcu_gp
+      4 ?        00:00:00 rcu_par_gp
+      6 ?        00:00:00 kworker/0:0H-kblockd
+      9 ?        00:00:00 mm_percpu_wq
+     10 ?        00:00:00 ksoftirqd/0
+     11 ?        00:00:01 rcu_sched
+     12 ?        00:00:00 migration/0
+     13 ?        00:00:00 cpuhp/0
+     14 ?        00:00:00 cpuhp/1
+     15 ?        00:00:00 migration/1
+
+
+
+->Exibe processos de um grupo
+
+$ ps -g
+    PID TTY      STAT   TIME COMMAND
+   1199 pts/0    Ss     0:00 /usr/bin/zsh
+   1221 pts/0    S+     0:01 vi 201.txt
+   1233 pts/1    Ss+    0:05 /usr/bin/zsh
+   1470 pts/2    Ss     0:02 /usr/bin/zsh
+   2005 pts/2    R+     0:00 ps -g
+
+
+
+->Exibe processos de um usuario
+
+$ ps -u
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+dublin      1199  0.0  0.3  13500  7048 pts/0    Ss   17:13   0:00 /usr/bin/zsh
+dublin      1221  0.0  0.4  16076  8780 pts/0    S+   17:14   0:01 vi 201.txt
+dublin      1233  0.0  0.3  13620  7380 pts/1    Ss+  17:15   0:05 /usr/bin/zsh
+dublin      1470  0.0  0.3  10492  6476 pts/2    Ss   17:49   0:02 /usr/bin/zsh
+dublin      2013  0.0  0.1   9572  3200 pts/2    R+   19:35   0:00 ps -u
+
+$ ps -u root
+    PID TTY          TIME CMD
+      1 ?        00:00:04 systemd
+      2 ?        00:00:00 kthreadd
+      3 ?        00:00:00 rcu_gp
+      4 ?        00:00:00 rcu_par_gp
+      6 ?        00:00:00 kworker/0:0H-kblockd
+      9 ?        00:00:00 mm_percpu_wq
+     10 ?        00:00:00 ksoftirqd/0
+     11 ?        00:00:01 rcu_sched
+     12 ?        00:00:00 migration/0
+     13 ?        00:00:00 cpuhp/0
+
+
+->Exibe processos por PID
+$ ps -p 1199   
+    PID TTY          TIME CMD
+   1199 pts/0    00:00:00 zsh
+                                                                                               
+┌──(dublin㉿dublin)-[~]
+└─$ ps -p 1199 -f
+UID          PID    PPID  C STIME TTY          TIME CMD
+dublin      1199    1196  0 17:13 pts/0    00:00:00 /usr/bin/zsh
+
+
+$ ps -H        
+    PID TTY          TIME CMD
+   1470 pts/2    00:00:02 zsh
+   2024 pts/2    00:00:00   ps
+                                                                                               
+┌──(dublin㉿dublin)-[~]
+└─$ ps -L
+    PID     LWP TTY          TIME CMD
+   1470    1470 pts/2    00:00:02 zsh
+   2027    2027 pts/2    00:00:00 ps
+
+
+$ ps | head -4 
+    PID TTY          TIME CMD
+   1470 pts/2    00:00:03 zsh
+   2089 pts/2    00:00:00 ps
+   2090 pts/2    00:00:00 head
+
+
+
+-> ps aux - Exibe informação de todos os processos
+$ ps aux       
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.5 167956 11324 ?        Ss   17:10   0:04 /sbin/init splash
+root           2  0.0  0.0      0     0 ?        S    17:10   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   17:10   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   17:10   0:00 [rcu_par_gp]
+root           6  0.0  0.0      0     0 ?        I<   17:10   0:00 [kworker/0:0H-kblockd]
+root           9  0.0  0.0      0     0 ?        I<   17:10   0:00 [mm_percpu_wq]
+root          10  0.0  0.0      0     0 ?        S    17:10   0:00 [ksoftirqd/0]
+root          11  0.0  0.0      0     0 ?        I    17:10   0:01 [rcu_sched]
+root          12  0.0  0.0      0     0 ?        S    17:10   0:00 [migration/0]
+root          13  0.0  0.0      0     0 ?        S    17:10   0:00 [cpuhp/0]
+
+
+-> ps faux -Exibe informações do processo pai e filho.
+
+$ ps faux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           2  0.0  0.0      0     0 ?        S    17:10   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   17:10   0:00  \_ [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   17:10   0:00  \_ [rcu_par_gp]
+root           6  0.0  0.0      0     0 ?        I<   17:10   0:00  \_ [kworker/0:0H-kblockd]
+root           9  0.0  0.0      0     0 ?        I<   17:10   0:00  \_ [mm_percpu_wq]
+root          10  0.0  0.0      0     0 ?        S    17:10   0:00  \_ [ksoftirqd/0]
+root          11  0.0  0.0      0     0 ?        I    17:10   0:01  \_ [rcu_sched]
+root          12  0.0  0.0      0     0 ?        S    17:10   0:00  \_ [migration/0]
+root          13  0.0  0.0      0     0 ?        S    17:10   0:00  \_ [cpuhp/0]
+
+
+$ ps aux | grep -E --color "samba|ssh|apache2" - Comando ps com varios comandos.
+
+dublin       908  0.0  0.0   5932   468 ?        Ss   13:10   0:00 /usr/bin/ssh-agent x-session-manager
+dublin      2118  0.0  0.0   6244   704 pts/1    S+   16:14   0:00 grep --color=auto -E --color samba|ssh|apache2
+
+
+
+
+
+***Comando vmstat - Realiza relatorio referente a processo do sistema, memoria, paginação,blocos de entrada e saída, CPU etc.
+
+-> vmstat 3 6 (intervalo de 3segundos para 3 coletas)
+
+# vmstat 3 3                                                                             1 ⨯
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 2  0      0 955608  47692 459604    0    0    23     4   54  107  0  1 99  0  0
+ 0  0      0 955348  47692 459644    0    0     0     0  122  203  0  1 99  0  0
+ 0  0      0 955348  47700 459636    0    0     0     4   62  112  0  0 100  0  0
+
+
+-s Relatorio de memoria
+-d Relatorio de disco
+-p Relatorio de partiçoes
+-a Relatórios de memoria ativa e inativa
+
+
+# vmstat -a
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free  inact active   si   so    bi    bo   in   cs us sy id wa st
+ 0  0      0 953372 658348 206312    0    0    20     4   54  105  0  1 99  0  0
+
+
+**** Comando netstat - Responsavel por exibir interfaces de rede configuradas, conexões de rede e tabelas de roteamento.
+
+
+$ netstat --help
+usage: netstat [-vWeenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help}
+       netstat [-vWnNcaeol] [<Socket> ...]
+       netstat { [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] }
+
+        -r, --route              display routing table
+        -i, --interfaces         display interface table
+        -g, --groups             display multicast group memberships
+        -s, --statistics         display networking statistics (like SNMP)
+        -M, --masquerade         display masqueraded connections
+
+        -v, --verbose            be verbose
+        -W, --wide               don't truncate IP addresses
+        -n, --numeric            don't resolve names
+        --numeric-hosts          don't resolve host names
+        --numeric-ports          don't resolve port names
+        --numeric-users          don't resolve user names
+        -N, --symbolic           resolve hardware names
+        -e, --extend             display other/more information
+        -p, --programs           display PID/Program name for sockets
+        -o, --timers             display timers
+        -c, --continuous         continuous listing
+
+        -l, --listening          display listening server sockets
+        -a, --all                display all sockets (default: connected)
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+        -Z, --context            display SELinux security context for sockets
+
+  <Socket>={-t|--tcp} {-u|--udp} {-U|--udplite} {-S|--sctp} {-w|--raw}
+           {-x|--unix} --ax25 --ipx --netrom
+  <AF>=Use '-6|-4' or '-A <af>' or '--<af>'; default: inet
+  List of possible address families (which support routing):
+    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) ipx (Novell IPX) ddp (Appletalk DDP) 
+    x25 (CCITT X.25) 
+
+
+#netstat -atun - Comando fara uma varredura por a/ todas conexões /t tcp /u udp /n formato numerico.
+
+*** Comando w. Exibe informações remotas do usuario conectado e verificar conexões indevidas.
+
+$ w
+ 14:19:56 up  1:10,  1 user,  load average: 0.06, 0.08, 0.04
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+dublin   tty7     :0               13:10    1:10m 14.35s  0.39s xfce4-session
+
+
+***Comando TOP - Obter informações de processos e nivel de monitoramento, sendo possivel consultar as mesmas informações que o ps.
+
+-i ignora processos zombie
+-u usuario
+-p pid
+
+[enter ou espaço atualiza]
+<h> <?> - comandos de ajuda
+<B> -Desabilita a opção negrito
+<d> <s> - Redefine o tempo
+<u> <U> - determina que processos sejam monitorados pelo dono especificado
+<q> Sai do top
+<r> Redefine o valor de nice ao pid especificado.
+<Z> - altera as cores
+<l> Desabilita ou habilita o tempo de execução e a quantidade de usuarios autenticados
+<t> Desabilita ou habilita informações de processos e consumo no cabeçalho.
+<m> Desabilita o habilita a memoria no cabeçalho
+
+
+***Comando sar - Gera relatórios de uso dos dispositivos e uso da cpu.
+
+Arquivo de consulta /var/log/sysstat - Debian
+/var/log/sa CentOS.
+
+Habilitar coleta de dados
+/etc/default/sysstat
+ENABLE="false" por "true"
+
+#systemctl enable sysstat.service - Iniciar pelo logon
+
+#systemctl start sysstat.service - 
+#systemctl status sysstat.service - 
+
+
+$ sar -u                                                                                                                                                                     
+Linux 5.9.0-kali1-amd64 (dublin)        04/03/2021      _x86_64_        (2 CPU)
+
+01:09:56 PM  LINUX RESTART      (2 CPU)
+                                                                                                                                                                               
+01:10:01 PM     CPU     %user     %nice   %system   %iowait    %steal     %idle
+01:20:35 PM     all      0.53      0.02      1.48      2.25      0.00     95.72
+01:30:36 PM     all      0.25      0.00      0.19      0.02      0.00     99.55
+01:40:00 PM     all      0.11      0.00      0.14      0.06      0.00     99.69
+01:50:36 PM     all      0.07      0.00      0.16      0.01      0.00     99.77
+02:00:35 PM     all      0.06      0.00      0.14      0.00      0.00     99.80
+02:10:04 PM     all      0.27      0.00      0.47      0.01      0.00     99.26
+02:20:35 PM     all      0.44      0.00      1.09      0.03      0.00     98.44
+02:30:55 PM     all      0.32      0.00      0.63      0.01      0.00     99.03
+02:40:04 PM     all      0.31      0.00      0.64      0.01      0.00     99.04
+02:50:35 PM     all      0.17      0.00      0.29      0.00      0.00     99.54
+03:00:25 PM     all      0.45      0.00      0.64      0.01      0.00     98.90
+03:10:04 PM     all      0.19      0.00      0.47      0.01      0.00     99.33
+03:20:25 PM     all      0.16      0.00      0.40      0.01      0.00     99.44
+03:30:35 PM     all      0.08      0.00      0.26      0.00      0.00     99.66
+03:40:04 PM     all      0.07      0.00      0.24      0.00      0.00     99.69
+03:50:35 PM     all      0.06      0.00      0.24      0.01      0.00     99.69
+04:00:35 PM     all      0.63      0.00      0.77      0.01      0.00     98.59
+Average:        all      0.25      0.00      0.49      0.15      0.00     99.12
+
+
+
+
+
+
+
+****Objetivo 200.2: Prever necessidades futuras de recursos.
+
+Collectd - Coletar estatisticas do sistema- Banco RDD - Roud Robin Database.
+
+/etc/collectd.conf(debian)
+/etc/collectd/collectd.conf(CentOs)
+#yum install epel-release
+yum update
+yum install collectd
+
+#apt install collectd
+
+/var/lib/collectd
+
+
+Cacti - Le arquivos do tipo RDD e apresenta gráficos. Protocolo SNMP - SIMPLE NETWORK MESSAGE PROTOCOL
+
+
+#vim /etc/sysconfig/selinux
+
+Alterar SELINUX=enforcing para SELINUX=disabled
+
+restart server
+
+#systemctl stop firewalld
+
+Configurando a lista EPE do repositorio.
+
+rpm -Uvh https://d1...
+
+
+MRTG - Multi Router Traffic Grapher) tem a função de mostrar carga de trafego entre conexões de rede, que trafegam no roteador da rede.
+
+/etc/mrtg/mrtg.cfg
+
+
+***Comando iotop - Ferramenta que permite a verificação dos processos do sistema, trafego de entrada e saida de dados.
+
+#apt install iotop
+
+***Comando dstat - Substitui o iostat, netstat. Verifica processos que mais consome a ram e visualiza a Leitura/Escrita, CPU, DISCO e Carga de rede.
+cpu -c
+disco -d
+--disk-util
+--disk-tps
+
+$ dstat -cd
+--total-cpu-usage-- -dsk/total-
+usr sys idl wai stl| read  writ                                                                                                                                                
+  0   0  99   0   0|  22k   14k
+  1   1  99   0   0|   0     0 
+  1   0  98   0   0|   0     0 
+  1   2  98   0   0|   0     0 
+  1   0  99   0   0|   0     0 
+
+
+$ dstat -cd --disk-util --disk-tps
+/usr/bin/dstat:2619: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+--total-cpu-usage-- -dsk/total- sda--sr0- -dsk/total-
+usr sys idl wai stl| read  writ|util:util|#read #writ                                                                                                                          
+  0   0  99   0   0|  22k   14k|0.39:0.00|   1     1 
+  1   1  99   0   0|   0     0 |   0:   0|   0     0 
+  1   1  98   0   0|   0  4096B|0.40:   0|   0     1 
+  1   2  98   0   0|   0     0 |   0:   0|   0     0 
+
+
+***Comando ioping - Ferramenta capaz de verificar a latencia de determinado volume de armazenamento.
+
+#apt install ioping
+
+$ sudo ioping -c 10 /dev/sda1
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=1 time=28.0 ms (warmup)
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=2 time=49.9 ms
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=3 time=47.4 ms
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=4 time=86.5 ms
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=5 time=625.9 us
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=6 time=45.6 ms
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=7 time=1.74 ms (fast)
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=8 time=892.1 us (fast)
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=9 time=330.2 us (fast)
+4 KiB <<< /dev/sda1 (block device 571 MiB): request=10 time=200.3 us (fast)
+
+--- /dev/sda1 (block device 571 MiB) ioping statistics ---
+9 requests completed in 233.2 ms, 36 KiB read, 38 iops, 154.4 KiB/s
+generated 10 requests in 9.00 s, 40 KiB, 1 iops, 4.44 KiB/s
+min/avg/max/mdev = 200.3 us / 25.9 ms / 86.5 ms / 30.3 ms
+
+
+***Comando atop - Ferramenta capaz de monitorar desempenho de todos os processos do sistema, trabalha com logs diarios. Verifica carga de atividades da CPU, memória, swap, discos e camadas de rede. Mostra utilização da CPU.
+
+Comando ss - Ferramenta para verificar portas abertas, como TCP, UDP, RAW e Unix sockets.
+
+ss é mais rapido que o netstat porque usa o netstat usa diretorios /proc  para obter informações, ja o ss busca diretamente com o kernel.
+
+Usage: ss [ OPTIONS ]
+       ss [ OPTIONS ] [ FILTER ]
+   -h, --help          this message
+   -V, --version       output version information
+   -n, --numeric       don't resolve service names
+   -r, --resolve       resolve host names
+   -a, --all           display all sockets
+   -l, --listening     display listening sockets
+   -o, --options       show timer information
+   -e, --extended      show detailed socket information
+   -m, --memory        show socket memory usage
+   -p, --processes     show process using socket
+   -i, --info          show internal TCP information
+       --tipcinfo      show internal tipc socket information
+   -s, --summary       show socket usage summary
+       --tos           show tos and priority information
+       --cgroup        show cgroup information
+   -b, --bpf           show bpf filter socket information
+   -E, --events        continually display sockets as they are destroyed
+   -Z, --context       display process SELinux security contexts
+   -z, --contexts      display process and socket SELinux security contexts
+   -N, --net           switch to the specified network namespace name
+
+   -4, --ipv4          display only IP version 4 sockets
+   -6, --ipv6          display only IP version 6 sockets
+   -0, --packet        display PACKET sockets
+   -t, --tcp           display only TCP sockets
+   -M, --mptcp         display only MPTCP sockets
+   -S, --sctp          display only SCTP sockets
+   -u, --udp           display only UDP sockets
+   -d, --dccp          display only DCCP sockets
+   -w, --raw           display only RAW sockets
+   -x, --unix          display only Unix domain sockets
+       --tipc          display only TIPC sockets
+       --vsock         display only vsock sockets
+   -f, --family=FAMILY display sockets of type FAMILY
+       FAMILY := {inet|inet6|link|unix|netlink|vsock|tipc|xdp|help}
+
+   -K, --kill          forcibly close sockets, display what was closed
+   -H, --no-header     Suppress header line
+   -O, --oneline       socket's data printed on a single line
+
+   -A, --query=QUERY, --socket=QUERY
+       QUERY := {all|inet|tcp|mptcp|udp|raw|unix|unix_dgram|unix_stream|unix_seqpacket|packet|netlink|vsock_stream|vsock_dgram|tipc}[,QUERY]
+
+   -D, --diag=FILE     Dump raw information about TCP sockets to FILE
+   -F, --filter=FILE   read filter information from FILE
+
+
+$ ss -V
+ss utility, iproute2-5.8.0
+┌──(dublin㉿dublin)-[~]
+└─$ ss -s
+TCP:   4 (estab 1, closed 2, orphaned 0, timewait 1)
+
+Transport Total     IP        IPv6
+RAW       1         0         1        
+UDP       1         1         0        
+TCP       2         1         1        
+INET      4         2         2        
+FRAG      0         0         0 
+
+$ ss -l
+Netid      State       Recv-Q      Send-Q                                        Local Address:Port                            Peer Address:Port       Process      
+nl         UNCONN      0           0                                                      rtnl:kernel                                      *                        
+nl         UNCONN      0           0                                                      rtnl:NetworkManager/497                          *                        
+nl         UNCONN      0           0                                                      rtnl:x-www-browser/2759                          *                        
+nl         UNCONN      0           0                                                      rtnl:x-www-browser/2759                          *                        
+nl         UNCONN      0           0                                                      rtnl:NetworkManager/497                          *                        
+nl         UNCONN      768         0                                                   tcpdiag:kernel                                      *                        
+nl         UNCONN      4352        0                                                   tcpdiag:ss/13480                                    *         
+u_str      LISTEN      0           4096                             /run/systemd/fsck.progress 15253                                      * 0                       
+u_dgr      UNCONN      0           0                              /run/systemd/journal/dev-log 15257                                      * 0                       
+u_str      LISTEN      0           4096                            /run/systemd/journal/stdout 15259                                      * 0                       
+u_dgr      UNCONN      0           0                               /run/systemd/journal/socket 15261                                      * 0                       
+u_seq      LISTEN      0           4096                                      /run/udev/control 15263                                      * 0                       
+u_dgr      UNCONN      0           0                                                         * 95102                                      * 15257                   
+u_dgr      UNCONN      0           0                                                         * 15238                                      * 15237                   
+u_dgr      UNCONN      0           0                                                         * 20478                                      * 15261                   
+u_dgr      UNCONN      0           0                                                         * 15237                                      * 15238                   
+u_dgr      UNCONN      0           0                                                         * 87333                                      * 15257                   
+u_dgr      UNCONN      0           0                                                         * 22157                                      * 15257 
+
+***Listando por serviço
+
+$ ss -l | grep ssh
+u_str LISTEN 0      4096         /run/user/1000/gnupg/S.gpg-agent.ssh 25686                           * 0           
+u_str LISTEN 0      128               /tmp/ssh-Y9SskSMeTtSH/agent.865 24906                           * 0    
+
+
+***Listar conexões LISTENING
+┌──(dublin㉿dublin)-[~]
+└─$ ss -ltn
+State              Recv-Q             Send-Q                         Local Address:Port                           Peer Address:Port             Process             
+LISTEN             0                  511                                        *:80                                        *:*                                    
+
+***Listando conexões TCP
+
+┌──(dublin㉿dublin)-[~]
+└─$ ss -atn
+State              Recv-Q             Send-Q                          Local Address:Port                          Peer Address:Port             Process             
+ESTAB              0                  0                              192.168.19.129:45680                         52.37.119.95:443                                  
+LISTEN             0                  511                                         *:80                                       *:*         
+
+***LIstando conexões UDP
+
+$ ss -aun
+State            Recv-Q            Send-Q                              Local Address:Port                           Peer Address:Port            Process            
+ESTAB            0                 0                             192.168.19.129%eth0:68                           192.168.19.254:67 
+
+
+#iptraf -Monitor de trafego de rede baseado em console para Linux. Monitora TCP, pacotes, estatistica de rede, detalhes ICMP, OSPF, TCP, IP, erros de checksum, descobres hosts ativos.
+Suporta ETHERNET, FDDI, ISDN, SLIP, PPP e loopback
+Socket raw
+
+*** Teste
+1 - Qual o nome do pacote que contem comandos como iostat, vmstat?
+sysstat
+
+
+2 - Qual comando pode ser utilizado para coletar estatisticas de CPU?
+#iostat
+
+3 - O user executa iostat -c 5 5? O que representa?
+-c verificação da cpu
+primeiro 5 - representa o tempo de ciclo.
+segundo 5 - representa a quantidade de repetições do comando
+
+
+4 - Qual o formato do arquivo utilizado pelo collectd para armazenar as estatisticas?
+
+RRD
+
+5 - O comando sar sem parametro, verifica qual tipo de estatistica?
+#sar - cpu
+
+$ sar
+Linux 5.9.0-kali1-amd64 (dublin)        04/04/2021      _x86_64_        (2 CPU)
+
+12:00:36 AM     CPU     %user     %nice   %system   %iowait    %steal     %idle
+12:10:01 AM     all      0.46      0.03      0.84      0.36      0.00     98.32
+12:20:36 AM     all      0.22      0.00      0.57      0.01      0.00     99.20
+12:30:36 AM     all      0.21      0.00      0.54      0.01      0.00     99.24
+12:40:04 AM     all      0.22      0.00      0.56      0.01      0.00     99.22
+
+
+6 - O comando vmstat, executado sem opções representa que tipo de estatisticas?
+
+# processos, memoria e cpu
+$ vmstat
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0  18136 491984 156712 638552    0    0     5    16   37   78  0  1 99  0  0
+
+
+7 - Que tipo de informação podera ser identificada com o comando START do ps?
+#Hora que o processo iniciou.
+
+COMMAND     PID   TID TASKCMD       USER   FD      TYPE             DEVICE SIZE/OFF       NODE NAME
+systemd       1                        0  cwd   unknown                                        /proc/1/cwd (readlink: Permission denied)
+systemd       1                        0  rtd   unknown                                        /proc/1/root (readlink: Permission denied)
+systemd       1                        0  txt   unknown                                        /proc/1/exe (readlink: Permission denied)
+systemd       1                        0 NOFD                                                  /proc/1/fd (opendir: Permission denied)
+
+#lsof -l
+
+#lsof -i Sem parametros não mostra nada
+
+#lsof -e Comando invalido
+#lsof -ie Comando invalido
+
+9 - Os arquivos RRD utilizados pelo collectd aonde são aramazenados?
+
+/var/lib/collectd/
+
+
+10 - Qual comando verificar estatisticas de rede consultando diretamente o kernel?
+
+# ss
+
+
+****Objetivo 201:1 O kernel do Linux
